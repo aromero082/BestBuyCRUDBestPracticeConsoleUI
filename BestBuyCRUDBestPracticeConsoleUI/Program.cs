@@ -19,38 +19,22 @@ namespace BestBuyCRUDBestPracticeConsoleUI
 
             string connString = config.GetConnectionString("DefaultConnection");
             #endregion
-            IDbConnection conn = new MySqlConnection(connString);
-            DapperDepartmentRepository repo = new DapperDepartmentRepository(conn);
+            IDbConnection connection = new MySqlConnection(connString);
 
-            Console.WriteLine("Hello user, here are the current departments:");
-            Console.WriteLine("Plese press enter...");
-            Console.ReadLine();
+            var repo = new DapperProductRepository(connection);
 
-            var depos = repo.GetAllDepartments();
-            print(depos);
+            repo.CreateProduct("New stuff", 20, 1);
 
+            var products = repo.GetAllProducts();
 
-            Console.WriteLine("Do you want to add a department???");
-            string userResponse = Console.ReadLine();
-
-            if (userResponse.ToLower() == "Yes")
+            foreach(var prod in products)
             {
-                Console.WriteLine("What is the nname of your new Department???");
-                userResponse = Console.ReadLine();
-
-                repo.InsertDepartment(userResponse);
-                print(repo.GetAllDepartments());
+                Console.WriteLine($"{prod.ProductID} {prod.Name}");
             }
-
-            Console.WriteLine("Have a great day");
+            
 
         }
-        private static void print(IEnumerable<Department> depos)
-        {
-            foreach(var depo in depos)
-            {
-                Console.WriteLine($"ID: {depo.DepartmentID} Name: {depo.Name}");
-            }
-        }
+  
+        
     }
 }
